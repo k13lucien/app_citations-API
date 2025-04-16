@@ -27,6 +27,7 @@ function registerRoutes($router, $entityManager) {
     });
     
     $router->map('GET', '/citations/utilisateur/[i:id]', function ($id) use ($entityManager) {
+        AuthMiddleware::verify($id);
         (new CitationController($entityManager))->getByUtilisateur($id);
     });
     
@@ -56,10 +57,12 @@ function registerRoutes($router, $entityManager) {
     });
 
     $router->map('PUT', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
+        AuthMiddleware::verify($id);
         (new UtilisateurController($entityManager))->update($id);
     });
 
     $router->map('DELETE', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
+        AuthMiddleware::verify($id);
         (new UtilisateurController($entityManager))->delete($id);
     });
 }
