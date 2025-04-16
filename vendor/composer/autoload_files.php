@@ -17,4 +17,5 @@ return array(
     'a4a119a56e50fbb293281d9a48007e0e' => $vendorDir . '/symfony/polyfill-php80/bootstrap.php',
     'ec07570ca5a812141189b1fa81503674' => $vendorDir . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
     '2660e4095a14b26763cfd58024acce19' => $baseDir . '/routes/api.php',
+    '4261b81d83317b83b1a23a28748b34e8' => $baseDir . '/config/bootstrap.php',
 );

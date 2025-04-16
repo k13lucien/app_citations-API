@@ -83,12 +83,6 @@ class Citation
         return $this;
     }
 
-    public function incrementView(): self
-    {
-        $this->countView++;
-        return $this;
-    }
-
     public function getCountLike(): int
     {
         return $this->countLike;
@@ -97,12 +91,6 @@ class Citation
     public function setCountLike(int $countLike): self
     {
         $this->countLike = $countLike;
-        return $this;
-    }
-
-    public function addLike(): self
-    {
-        $this->countLike++;
         return $this;
     }
 
