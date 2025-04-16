@@ -2,12 +2,11 @@
 
 namespace App_citations\Middlewares;
 
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
+use App_citations\Core\Auth;
 
 class AuthMiddleware
 {
-    public static function verify(): ?int
+    public static function verify($expectedUserId = null)
     {
         $headers = apache_request_headers();
         $authHeader = $headers['Authorization'] ?? '';
@@ -20,13 +19,20 @@ class AuthMiddleware
 
         $jwt = substr($authHeader, 7);
 
-        try {
-            $decoded = JWT::decode($jwt, new Key($_ENV['SECRET_KEY'], 'HS256'));
-            return $decoded->sub;
-        } catch (\Exception $e) {
+        $payload = Auth::verifyJWT($jwt);
+
+        if (!$payload) {
             http_response_code(401);
-            echo json_encode(['message' => 'Token invalide : ' . $e->getMessage()]);
+            echo json_encode(["message" => "Token invalide ou expiré."]);
             exit;
         }
+
+        if ($expectedUserId !== null && $payload->user_id != $expectedUserId) {
+            http_response_code(403);
+            echo json_encode(["message" => "Accès interdit à cette ressource."]);
+            exit;
+        }
+
+        return $payload;
     }
 }

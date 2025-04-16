@@ -4,8 +4,7 @@ namespace App_citations\Controllers;
 
 use App_citations\Entities\Utilisateur;
 use Doctrine\ORM\EntityManagerInterface;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
+use App_citations\Core\Auth;
 
 class UtilisateurController
 {
@@ -55,14 +54,8 @@ class UtilisateurController
             return;
         }
     
-        $payload = [
-            'sub' => $utilisateur->getId(),
-            'email' => $utilisateur->getEmail(),
-            'exp' => time() + (60 * 60 * 24), // expire dans 24h
-        ];
-    
-        $jwt = JWT::encode($payload, $_ENV['SECRET_KEY'], 'HS256');
-    
+        $jwt = Auth::generateJWT($utilisateur->getId(), $utilisateur->getEmail());
+
         echo json_encode(['token' => $jwt]);
     }
 
