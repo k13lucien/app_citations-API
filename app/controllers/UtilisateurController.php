@@ -4,6 +4,8 @@ namespace App_citations\Controllers;
 
 use App_citations\Entities\Utilisateur;
 use Doctrine\ORM\EntityManagerInterface;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class UtilisateurController
 {
@@ -37,22 +39,31 @@ class UtilisateurController
         echo json_encode(['message' => 'Utilisateur créé avec succès.']);
     }
 
-    public function login()
+    public function login(): void
     {
-        $data = json_decode(file_get_contents("php://input"), true);
-
-        $repo = $this->em->getRepository(Utilisateur::class);
-        $user = $repo->findOneBy(['email' => $data['email'] ?? '']);
-
-        if (!$user || !password_verify($data['password'], $user->getPassword())) {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $email = $data['email'] ?? null;
+        $password = $data['password'] ?? null;
+    
+        $utilisateur = $this->em
+            ->getRepository(Utilisateur::class)
+            ->findOneBy(['email' => $email]);
+    
+        if (!$utilisateur || !password_verify($password, $utilisateur->getPassword())) {
             http_response_code(401);
-            echo json_encode(['error' => 'Email ou mot de passe invalide.']);
+            echo json_encode(['message' => 'Email ou mot de passe incorrect']);
             return;
         }
-
-        // Token JWT sera généré ici plus tard
-        http_response_code(200);
-        echo json_encode(['message' => 'Connexion réussie']);
+    
+        $payload = [
+            'sub' => $utilisateur->getId(),
+            'email' => $utilisateur->getEmail(),
+            'exp' => time() + (60 * 60 * 24), // expire dans 24h
+        ];
+    
+        $jwt = JWT::encode($payload, $_ENV['SECRET_KEY'], 'HS256');
+    
+        echo json_encode(['token' => $jwt]);
     }
 
     public function show($id)
