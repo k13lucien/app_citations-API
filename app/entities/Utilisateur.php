@@ -31,10 +31,10 @@ class Utilisateur
     #[ORM\Column(type: 'integer')]
     private int $countCitations = 0;
 
-    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Citation::class)]
+    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Citation::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $citations;
 
-    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Preference::class)]
+    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Preference::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $preferences;
 
     #[ORM\Column(type: 'datetime_immutable')]

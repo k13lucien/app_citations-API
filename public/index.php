@@ -7,7 +7,6 @@ $entityManager = require __DIR__ . '/../config/bootstrap.php';
 $router = new AltoRouter();
 $router->setBasePath('/api');
 
-// Appelle la fonction pour enregistrer les routes
 require_once __DIR__ . '/../routes/api.php';
 registerRoutes($router, $entityManager);
 

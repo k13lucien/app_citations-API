@@ -1,9 +1,10 @@
 <?php
 
 use App_citations\Controllers\CitationController;
+use App_citations\Controllers\UtilisateurController;
 
 function registerRoutes($router, $entityManager) {
-    
+
     $router->map('POST', '/citations', function () use ($entityManager) {
         (new CitationController($entityManager))->create();
     });
@@ -38,5 +39,30 @@ function registerRoutes($router, $entityManager) {
     
     $router->map('POST', '/citations/[i:id]/vue', function ($id) use ($entityManager) {
         (new CitationController($entityManager))->addVue($id);
+    });
+
+    // Enregistrement d’un utilisateur
+    $router->map('POST', '/utilisateurs/register', function () use ($entityManager) {
+        (new UtilisateurController($entityManager))->register();
+    });
+
+    // Connexion d’un utilisateur
+    $router->map('POST', '/utilisateurs/login', function () use ($entityManager) {
+        (new UtilisateurController($entityManager))->login();
+    });
+
+    // Récupération des infos d’un utilisateur
+    $router->map('GET', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
+        (new UtilisateurController($entityManager))->show($id);
+    });
+
+    // Mise à jour des infos d’un utilisateur
+    $router->map('PUT', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
+        (new UtilisateurController($entityManager))->update($id);
+    });
+
+    // Suppression d’un utilisateur
+    $router->map('DELETE', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
+        (new UtilisateurController($entityManager))->delete($id);
     });
 }
