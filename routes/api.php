@@ -1,4 +1,7 @@
 <?php
+use AltoRouter;
+
+$router = new AltoRouter();
 
 $router->map('GET', '/', function () {
     echo "Bienvenue sur la page d'accueil !";

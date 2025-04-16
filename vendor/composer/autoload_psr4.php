@@ -37,7 +37,6 @@ return array(
     'Doctrine\\Common\\' => array($vendorDir . '/doctrine/event-manager/src'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
     'App_citations\\Middlewares\\' => array($baseDir . '/app/middlewares'),
-    'App_citations\\EventListener\\' => array($baseDir . '/app/EventListener'),
     'App_citations\\Entities\\' => array($baseDir . '/app/entities'),
     'App_citations\\Core\\' => array($baseDir . '/app/core'),
     'App_citations\\Controllers\\' => array($baseDir . '/app/controllers'),

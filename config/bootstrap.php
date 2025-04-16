@@ -4,9 +4,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\DBAL\DriverManager;
 use Dotenv\Dotenv;
-use App_citations\EventListener\TimestampListener;
-use Doctrine\ORM\Event\Listeners\DoctrineEventListener;
-use Doctrine\ORM\Events;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -33,11 +30,5 @@ $connectionParams = [
 
 $connection = DriverManager::getConnection($connectionParams, $config);
 $entityManager = new EntityManager($connection, $config);
-
-$eventManager = $entityManager->getEventManager();
-$eventManager->addEventListener(
-    [Events::prePersist, Events::preUpdate],
-    new TimestampListener()
-);
 
 return $entityManager;

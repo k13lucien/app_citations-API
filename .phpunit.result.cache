@@ -1,1 +1,1 @@
-{"version":1,"defects":[],"times":{"EntityManagerTest::testEntityManagerConnection":0.002}}
+{"version":1,"defects":{"CitationTest::testCreateCitation":8},"times":{"CitationTest::testCreateCitation":1.206,"EntityManagerTest::testEntityManagerConnection":0.001}}

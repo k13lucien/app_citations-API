@@ -69,7 +69,6 @@ class ComposerStaticInitd751713988987e9331980363e24189ce
         'A' => 
         array (
             'App_citations\\Middlewares\\' => 26,
-            'App_citations\\EventListener\\' => 28,
             'App_citations\\Entities\\' => 23,
             'App_citations\\Core\\' => 19,
             'App_citations\\Controllers\\' => 26,
@@ -200,10 +199,6 @@ class ComposerStaticInitd751713988987e9331980363e24189ce
         'App_citations\\Middlewares\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app/middlewares',
-        ),
-        'App_citations\\EventListener\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/app/EventListener',
         ),
         'App_citations\\Entities\\' => 
         array (

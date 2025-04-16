@@ -4,8 +4,7 @@
             "App_citations\\Controllers\\": "app/controllers",
             "App_citations\\Core\\": "app/core",
             "App_citations\\Entities\\": "app/entities",
-            "App_citations\\Middlewares\\": "app/middlewares",
-            "App_citations\\EventListener\\": "app/EventListener"
+            "App_citations\\Middlewares\\": "app/middlewares"
         },
         "files": [
             "routes/api.php"
@@ -20,8 +19,7 @@
         "altorouter/altorouter": "^2.0"
     },
     "scripts": {
-        "doctrine": "php bin/doctrine.php",
-        "make:entity": "bin/make-entity.php"
+        "doctrine": "php bin/doctrine.php"
     },
     "require-dev": {
         "phpunit/phpunit": "^11.5"
