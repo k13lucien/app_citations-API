@@ -14,11 +14,11 @@ class Preference
     private int $id;
 
     #[ORM\ManyToOne(targetEntity: Utilisateur::class, inversedBy: 'preferences')]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'utilisateur_id', referencedColumnName: 'id', nullable: false)]
     private Utilisateur $utilisateur;
 
     #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy: 'preferences')]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'categorie_id', referencedColumnName: 'id', nullable: false)]
     private Categorie $categorie;
 
     public function getId(): ?int
