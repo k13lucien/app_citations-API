@@ -1,47 +1,52 @@
 <?php
 
-use App_citations\Controllers\CitationController;
-use App_citations\Controllers\UtilisateurController;
-use App_citations\Controllers\CategorieController;
-use App_citations\Controllers\PreferenceController;
-use App_citations\Middlewares\AuthMiddleware;
+use App_citations\Controllers\{CitationController, UtilisateurController, CategorieController, PreferenceController};
+use App_citations\Middlewares\{AuthMiddleware, JwtMiddleware};
 
 function registerRoutes($router, $entityManager) {
 
     $router->map('POST', '/citations', function () use ($entityManager) {
+        JwtMiddleware::handle();
         (new CitationController($entityManager))->create();
     });
 
     $router->map('GET', '/citations', function () use ($entityManager) {
+        JwtMiddleware::handle();
         (new CitationController($entityManager))->index();
     });
 
     $router->map('GET', '/citations/[i:id]', function ($id) use ($entityManager) {
+        JwtMiddleware::handle();
         (new CitationController($entityManager))->show($id);
     });
     
     $router->map('PUT', '/citations/[i:id]', function ($id) use ($entityManager) {
+        JwtMiddleware::handle();
         (new CitationController($entityManager))->update($id);
     });
     
     $router->map('DELETE', '/citations/[i:id]', function ($id) use ($entityManager) {
+        JwtMiddleware::handle();
         (new CitationController($entityManager))->delete($id);
     });
     
     $router->map('GET', '/citations/utilisateur/[i:id]', function ($id) use ($entityManager) {
-        AuthMiddleware::verify($id);
+        AuthMiddleware::ensureUser($id);
         (new CitationController($entityManager))->getByUtilisateur($id);
     });
     
     $router->map('GET', '/citations/categorie/[i:id]', function ($id) use ($entityManager) {
+        JwtMiddleware::handle();
         (new CitationController($entityManager))->getByCategorie($id);
     });
     
     $router->map('POST', '/citations/[i:id]/like', function ($id) use ($entityManager) {
+        JwtMiddleware::handle();
         (new CitationController($entityManager))->addLike($id);
     });
     
     $router->map('POST', '/citations/[i:id]/vue', function ($id) use ($entityManager) {
+        JwtMiddleware::handle();
         (new CitationController($entityManager))->addVue($id);
     });
 
@@ -54,44 +59,47 @@ function registerRoutes($router, $entityManager) {
     });
 
     $router->map('GET', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
-        AuthMiddleware::verify($id);
+        AuthMiddleware::ensureUser($id);
         (new UtilisateurController($entityManager))->show($id);
     });
 
     $router->map('PUT', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
-        AuthMiddleware::verify($id);
+        AuthMiddleware::ensureUser($id);
         (new UtilisateurController($entityManager))->update($id);
     });
 
     $router->map('DELETE', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
-        AuthMiddleware::verify($id);
+        AuthMiddleware::ensureUser($id);
         (new UtilisateurController($entityManager))->delete($id);
     });
 
     $router->map('GET', '/categories', function () use ($entityManager) {
+        JwtMiddleware::handle();
         (new CategorieController($entityManager))->index();
     });
 
     $router->map('GET', '/categories/[i:id]', function ($id) use ($entityManager) {
+        JwtMiddleware::handle();
         (new CategorieController($entityManager))->show($id);
     });
 
     $router->map('POST', '/categories', function () use ($entityManager) {
+        JwtMiddleware::handle();
         (new CategorieController($entityManager))->create();
     });
 
     $router->map('GET', '/utilisateurs/[i:id]/preferences', function ($id) use ($entityManager) {
-        AuthMiddleware::verify($id);
+        AuthMiddleware::ensureUser($id);
         (new PreferenceController($entityManager))->index($id);
     });
 
     $router->map('POST', '/utilisateurs/[i:id]/preferences', function ($id) use ($entityManager) {
-        AuthMiddleware::verify($id);
+        AuthMiddleware::ensureUser($id);
         (new PreferenceController($entityManager))->add($id);
     });
 
     $router->map('DELETE', '/utilisateurs/[i:id]/preferences', function ($id) use ($entityManager) {
-        AuthMiddleware::verify($id);
+        AuthMiddleware::ensureUser($id);
         (new PreferenceController($entityManager))->delete($id);
     });
 }
