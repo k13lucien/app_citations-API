@@ -2,6 +2,8 @@
 
 use App_citations\Controllers\CitationController;
 use App_citations\Controllers\UtilisateurController;
+use App_citations\Controllers\CategorieController;
+use App_citations\Controllers\PreferenceController;
 use App_citations\Middlewares\AuthMiddleware;
 
 function registerRoutes($router, $entityManager) {
@@ -64,5 +66,32 @@ function registerRoutes($router, $entityManager) {
     $router->map('DELETE', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
         AuthMiddleware::verify($id);
         (new UtilisateurController($entityManager))->delete($id);
+    });
+
+    $router->map('GET', '/categories', function () use ($entityManager) {
+        (new CategorieController($entityManager))->index();
+    });
+
+    $router->map('GET', '/categories/[i:id]', function ($id) use ($entityManager) {
+        (new CategorieController($entityManager))->show($id);
+    });
+
+    $router->map('POST', '/categories', function () use ($entityManager) {
+        (new CategorieController($entityManager))->create();
+    });
+
+    $router->map('GET', '/utilisateurs/[i:id]/preferences', function ($id) use ($entityManager) {
+        AuthMiddleware::verify($id);
+        (new PreferenceController($entityManager))->index($id);
+    });
+
+    $router->map('POST', '/utilisateurs/[i:id]/preferences', function ($id) use ($entityManager) {
+        AuthMiddleware::verify($id);
+        (new PreferenceController($entityManager))->add($id);
+    });
+
+    $router->map('DELETE', '/utilisateurs/[i:id]/preferences', function ($id) use ($entityManager) {
+        AuthMiddleware::verify($id);
+        (new PreferenceController($entityManager))->delete($id);
     });
 }
