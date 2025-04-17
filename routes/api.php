@@ -1,7 +1,7 @@
 <?php
 
 use App_citations\Controllers\{CitationController, UtilisateurController, CategorieController, PreferenceController};
-use App_citations\Middlewares\{AuthMiddleware, JwtMiddleware};
+use App_citations\Middlewares\{AuthMiddleware, JwtMiddleware, CitationOwnerMiddleware};
 
 function registerRoutes($router, $entityManager) {
 
@@ -21,12 +21,12 @@ function registerRoutes($router, $entityManager) {
     });
     
     $router->map('PUT', '/citations/[i:id]', function ($id) use ($entityManager) {
-        JwtMiddleware::handle();
+        CitationOwnerMiddleware::checkOwnership($entityManager, $id);
         (new CitationController($entityManager))->update($id);
     });
     
     $router->map('DELETE', '/citations/[i:id]', function ($id) use ($entityManager) {
-        JwtMiddleware::handle();
+        CitationOwnerMiddleware::checkOwnership($entityManager, $id);
         (new CitationController($entityManager))->delete($id);
     });
     
