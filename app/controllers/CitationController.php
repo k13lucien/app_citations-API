@@ -5,6 +5,8 @@ namespace App_citations\Controllers;
 use App_citations\Entities\Citation;
 use App_citations\Entities\Categorie;
 use App_citations\Entities\Utilisateur;
+use App_citations\Entities\Preference;
+use App_citations\Services\Mailer;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CitationController
@@ -46,6 +48,8 @@ class CitationController
 
         http_response_code(201);
         echo json_encode(['message' => 'Citation créée avec succès.']);
+        $this->notifierUtilisateurs($categorie, $citation);
+
     }
 
     public function index()
@@ -201,6 +205,23 @@ class CitationController
         $this->em->flush();
 
         echo json_encode(['message' => 'Vue ajoutée.']);
+    }
+
+    private function notifierUtilisateurs(Categorie $categorie, Citation $citation)
+    {
+        $preferences = $this->em->getRepository(Preference::class)->findBy(['categorie' => $categorie]);
+
+        foreach ($preferences as $preference) {
+            $utilisateur = $preference->getUtilisateur();
+
+            $subject = "Nouvelle citation dans votre catégorie préférée !";
+            $body = "<p>Bonjour {$utilisateur->getName()},</p>
+                    <p>Une nouvelle citation a été ajoutée dans la catégorie que vous suivez :</p>
+                    <blockquote>{$citation->getContent()}</blockquote>
+                    <p>À bientôt sur notre plateforme !</p>";
+
+            Mailer::send($utilisateur->getEmail(), $subject, $body);
+        }
     }
 
 }

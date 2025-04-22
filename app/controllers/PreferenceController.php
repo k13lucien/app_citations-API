@@ -105,4 +105,27 @@ class PreferenceController
 
         echo json_encode(['message' => 'Préférence supprimée.']);
     }
+
+    public function getUtilisateursByCategorie(int $categorieId): array
+    {
+        $categorie = $this->em->find(Categorie::class, $categorieId);
+
+        if (!$categorie) {
+            return [];
+        }
+
+        $preferences = $this->em->getRepository(Preference::class)->findBy(['categorie' => $categorie]);
+
+        $utilisateurs = [];
+
+        foreach ($preferences as $preference) {
+            $utilisateur = $preference->getUtilisateur();
+            $utilisateurs[] = [
+                'email' => $utilisateur->getEmail(),
+                'name'  => $utilisateur->getName(),
+            ];
+        }
+
+        return $utilisateurs;
+    }
 }
