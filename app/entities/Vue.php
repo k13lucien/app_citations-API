@@ -14,11 +14,11 @@ class Vue
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
+    #[ORM\ManyToOne(targetEntity: Utilisateur::class, inversedBy: 'vues')]
     #[ORM\JoinColumn(name: "utilisateur_id", referencedColumnName: "id", nullable: false)]
     private Utilisateur $utilisateur;
-
-    #[ORM\ManyToOne(targetEntity: Citation::class)]
+    
+    #[ORM\ManyToOne(targetEntity: Citation::class, inversedBy: 'vues')]
     #[ORM\JoinColumn(name: "citation_id", referencedColumnName: "id", nullable: false)]
     private Citation $citation;
 

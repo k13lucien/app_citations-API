@@ -5,7 +5,8 @@
             "App_citations\\Core\\": "app/core",
             "App_citations\\Entities\\": "app/entities",
             "App_citations\\Middlewares\\": "app/middlewares",
-            "App_citations\\Services\\": "app/services"
+            "App_citations\\Services\\": "app/services",
+            "App_citations\\Migrations\\": "app/migrations"
         },
         "files": [
             "routes/api.php",
@@ -19,7 +20,8 @@
         "symfony/cache": "^7.2",
         "symfony/console": "^7.2",
         "altorouter/altorouter": "^2.0",
-        "phpmailer/phpmailer": "^6.9"
+        "phpmailer/phpmailer": "^6.9",
+        "doctrine/migrations": "^3.9"
     },
     "scripts": {
         "doctrine": "php bin/doctrine.php"

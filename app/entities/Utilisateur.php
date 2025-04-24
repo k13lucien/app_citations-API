@@ -28,14 +28,17 @@ class Utilisateur
     #[ORM\Column(type: 'string', length: 255)]
     private string $password;
 
-    #[ORM\Column(type: 'integer')]
-    private int $countCitations = 0;
-
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Citation::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $citations;
 
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Preference::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $preferences;
+
+    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Like::class, cascade: ['remove'])]
+    private Collection $likes;
+
+    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Vue::class, cascade: ['remove'])]
+    private Collection $vues;
 
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
@@ -47,6 +50,8 @@ class Utilisateur
     {
         $this->citations = new ArrayCollection();
         $this->preferences = new ArrayCollection();
+        $this->likes = new ArrayCollection();
+        $this->vues = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -99,17 +104,6 @@ class Utilisateur
         return $this;
     }
 
-    public function getCountCitations(): int
-    {
-        return $this->countCitations;
-    }
-
-    public function setCountCitations(int $countCitations): self
-    {
-        $this->countCitations = $countCitations;
-        return $this;
-    }
-
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
@@ -140,5 +134,15 @@ class Utilisateur
     public function getPreferences(): Collection
     {
         return $this->preferences;
+    }
+
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function getVues(): Collection
+    {
+        return $this->vues;
     }
 }

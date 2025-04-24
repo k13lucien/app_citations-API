@@ -20,12 +20,6 @@ class Citation
     #[ORM\Column(type: 'text')]
     private string $content;
 
-    #[ORM\Column(type: 'integer')]
-    private int $countView = 0;
-
-    #[ORM\Column(type: 'integer')]
-    private int $countLike = 0;
-
     #[ORM\Column(type: 'datetime_immutable', nullable: false)]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -40,9 +34,17 @@ class Citation
     #[ORM\JoinColumn(name: 'categorie_id', referencedColumnName: 'id', nullable: false)]
     private Categorie $categorie;
 
+    #[ORM\OneToMany(mappedBy: 'citation', targetEntity: Like::class, cascade: ['persist', 'remove'])]
+    private Collection $likes;
+
+    #[ORM\OneToMany(mappedBy: 'citation', targetEntity: Vue::class, cascade: ['persist', 'remove'])]
+    private Collection $vues;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->likes = new ArrayCollection();
+        $this->vues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,28 +71,6 @@ class Citation
     public function setContent(string $content): self
     {
         $this->content = $content;
-        return $this;
-    }
-
-    public function getCountView(): int
-    {
-        return $this->countView;
-    }
-
-    public function setCountView(int $countView): self
-    {
-        $this->countView = $countView;
-        return $this;
-    }
-
-    public function getCountLike(): int
-    {
-        return $this->countLike;
-    }
-
-    public function setCountLike(int $countLike): self
-    {
-        $this->countLike = $countLike;
         return $this;
     }
 
@@ -138,4 +118,13 @@ class Citation
         return $this;
     }
 
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function getVues(): Collection
+    {
+        return $this->vues;
+    }
 }
