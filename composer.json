@@ -6,7 +6,8 @@
             "App_citations\\Entities\\": "app/entities",
             "App_citations\\Middlewares\\": "app/middlewares",
             "App_citations\\Services\\": "app/services",
-            "App_citations\\Migrations\\": "app/migrations"
+            "App_citations\\Migrations\\": "app/migrations",
+            "App_citations\\Repositories\\": "app/repositories"
         },
         "files": [
             "routes/api.php",

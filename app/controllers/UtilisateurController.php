@@ -74,7 +74,6 @@ class UtilisateurController
             'email' => $user->getEmail(),
             'name' => $user->getName(),
             'surname' => $user->getSurname(),
-            'countCitations' => $user->getCountCitations(),
             'createdAt' => $user->getCreatedAt(),
             'updatedAt' => $user->getUpdatedAt()
         ]);

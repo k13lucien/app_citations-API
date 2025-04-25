@@ -9,13 +9,37 @@ use Doctrine\ORM\EntityRepository;
 
 class LikeRepository extends EntityRepository
 {
-    public function hasUserLikedCitation(Utilisateur $user, Citation $citation): bool
+    public function countLikesByCitation(int $citationId): int
     {
-        $like = $this->findOneBy([
-            'utilisateur' => $user,
-            'citation' => $citation
-        ]);
+        return (int) $this->createQueryBuilder('l')
+            ->select('COUNT(l.id)')
+            ->where('l.citation = :citationId')
+            ->setParameter('citationId', $citationId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function hasUserLiked(int $userId, int $citationId): bool
+    {
+        $like = $this->createQueryBuilder('l')
+            ->where('l.utilisateur = :userId')
+            ->andWhere('l.citation = :citationId')
+            ->setParameter('userId', $userId)
+            ->setParameter('citationId', $citationId)
+            ->getQuery()
+            ->getOneOrNullResult();
 
         return $like !== null;
+    }
+
+    public function findLike(int $userId, int $citationId): ?Like
+    {
+        return $this->createQueryBuilder('l')
+            ->where('l.utilisateur = :userId')
+            ->andWhere('l.citation = :citationId')
+            ->setParameter('userId', $userId)
+            ->setParameter('citationId', $citationId)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

@@ -61,8 +61,8 @@ class CitationController
                 'id' => $citation->getId(),
                 'name' => $citation->getName(),
                 'content' => $citation->getContent(),
-                'count_view' => $citation->getCountView(),
-                'count_like' => $citation->getCountLike(),
+                'count_view' => $citation->getVues(),
+                'count_like' => $citation->getLikes(),
                 'created_at' => $citation->getCreatedAt()->format('Y-m-d H:i:s'),
                 'updated_at' => $citation->getUpdatedAt()?->format('Y-m-d H:i:s'),
                 'utilisateur_id' => $citation->getUtilisateur()->getId(),
@@ -87,8 +87,8 @@ class CitationController
             'id' => $citation->getId(),
             'name' => $citation->getName(),
             'content' => $citation->getContent(),
-            'count_view' => $citation->getCountView(),
-            'count_like' => $citation->getCountLike(),
+            'count_view' => $citation->getVues(),
+            'count_like' => $citation->getLikes(),
             'created_at' => $citation->getCreatedAt()->format('Y-m-d H:i:s'),
             'updated_at' => $citation->getUpdatedAt()?->format('Y-m-d H:i:s'),
             'utilisateur_id' => $citation->getUtilisateur()->getId(),
@@ -149,8 +149,8 @@ class CitationController
                 'name' => $citation->getName(),
                 'content' => $citation->getContent(),
                 'categorie' => $citation->getCategorie()->getName(),
-                'nombre_vue' => $citation->getCountView(),
-                'nombre_like' => $citation->getCountLike(),
+                'nombre_vue' => $citation->getVues(),
+                'nombre_like' => $citation->getLikes(),
             ];
         }, $citations);
 
@@ -167,44 +167,12 @@ class CitationController
                 'name' => $citation->getName(),
                 'content' => $citation->getContent(),
                 'utilisateur' => $citation->getUtilisateur()->getEmail(),
-                'nombre_vue' => $citation->getCountView(),
-                'nombre_like' => $citation->getCountLike(),
+                'nombre_vue' => $citation->getVues(),
+                'nombre_like' => $citation->getLikes(),
             ];
         }, $citations);
 
         echo json_encode($data);
-    }
-
-    public function addLike(int $id)
-    {
-        $citation = $this->em->find(Citation::class, $id);
-
-        if (!$citation) {
-            http_response_code(404);
-            echo json_encode(['error' => 'Citation non trouvée.']);
-            return;
-        }
-
-        $citation->setCountLike($citation->getCountLike() + 1);
-        $this->em->flush();
-
-        echo json_encode(['message' => 'Like ajouté.']);
-    }
-
-    public function addVue(int $id)
-    {
-        $citation = $this->em->find(Citation::class, $id);
-
-        if (!$citation) {
-            http_response_code(404);
-            echo json_encode(['error' => 'Citation non trouvée.']);
-            return;
-        }
-
-        $citation->setCountView($citation->getCountView() + 1);
-        $this->em->flush();
-
-        echo json_encode(['message' => 'Vue ajoutée.']);
     }
 
     private function notifierUtilisateurs(Categorie $categorie, Citation $citation)

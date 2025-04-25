@@ -9,22 +9,25 @@ use Doctrine\ORM\EntityRepository;
 
 class VueRepository extends EntityRepository
 {
-    public function getViewsCountForCitation(Citation $citation): int
+    public function countVuesByCitation(int $citationId): int
     {
-        return $this->createQueryBuilder('v')
-            ->select('count(v.id)')
-            ->where('v.citation = :citation')
-            ->setParameter('citation', $citation)
+        return (int) $this->createQueryBuilder('v')
+            ->select('COUNT(v.id)')
+            ->where('v.citation = :citationId')
+            ->setParameter('citationId', $citationId)
             ->getQuery()
             ->getSingleScalarResult();
     }
 
-    public function hasUserViewedCitation(Utilisateur $user, Citation $citation): bool
+    public function hasUserViewed(int $userId, int $citationId): bool
     {
-        $vue = $this->findOneBy([
-            'utilisateur' => $user,
-            'citation' => $citation
-        ]);
+        $vue = $this->createQueryBuilder('v')
+            ->where('v.utilisateur = :userId')
+            ->andWhere('v.citation = :citationId')
+            ->setParameter('userId', $userId)
+            ->setParameter('citationId', $citationId)
+            ->getQuery()
+            ->getOneOrNullResult();
 
         return $vue !== null;
     }
