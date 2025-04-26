@@ -40,6 +40,12 @@ class Utilisateur
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Vue::class, cascade: ['remove'])]
     private Collection $vues;
 
+    #[ORM\Column(type: "string", nullable: true)]
+    private ?string $emailVerificationToken = null;
+
+    #[ORM\Column(type: "boolean")]
+    private bool $isVerified = false;
+
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
@@ -144,5 +150,27 @@ class Utilisateur
     public function getVues(): Collection
     {
         return $this->vues;
+    }
+
+    public function getEmailVerificationToken(): ?string
+    {
+        return $this->emailVerificationToken;
+    }
+
+    public function setEmailVerificationToken(?string $token): self
+    {
+        $this->emailVerificationToken = $token;
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $verified): self
+    {
+        $this->isVerified = $verified;
+        return $this;
     }
 }

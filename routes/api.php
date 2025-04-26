@@ -1,6 +1,6 @@
 <?php
 
-use App_citations\Controllers\{CitationController, UtilisateurController, CategorieController, PreferenceController, LikeController, VueController};
+use App_citations\Controllers\{CitationController, UtilisateurController, CategorieController, PreferenceController, LikeController, VueController, VerificationController};
 use App_citations\Middlewares\{AuthMiddleware, JwtMiddleware, CitationOwnerMiddleware};
 
 function registerRoutes($router, $entityManager) {
@@ -116,5 +116,9 @@ function registerRoutes($router, $entityManager) {
     $router->map('GET', '/citations/[i:id]/vues', function ($id) use ($entityManager) {
         JwtMiddleware::handle();
         (new VueController($entityManager))->getVues($id);
+    });
+
+    $router->map('GET', '/verify-email', function () use ($entityManager) {
+        (new VerificationController($entityManager))->verifyEmail($_GET);
     });
 }

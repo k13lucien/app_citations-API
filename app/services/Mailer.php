@@ -16,13 +16,13 @@ class Mailer
             $mail->isSMTP();
             $mail->Host       = 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'tonadresse@gmail.com'; 
-            $mail->Password   = 'mot de passe';
+            $mail->Username   = 'filskiemde13@gmail.com'; 
+            $mail->Password   = 'mzst ivih caxd sahp';
             $mail->SMTPSecure = 'tls';  
             $mail->Port       = 587;  
 
             // Infos de l'e-mail
-            $mail->setFrom('tonadresse@gmail.com', 'Citations App');
+            $mail->setFrom('filskiemde13@gmail.com', 'Citations App');
             $mail->addAddress($to);
             $mail->isHTML(true);
             $mail->Subject = $subject;
