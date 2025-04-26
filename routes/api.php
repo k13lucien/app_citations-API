@@ -121,4 +121,8 @@ function registerRoutes($router, $entityManager) {
     $router->map('GET', '/verify-email', function () use ($entityManager) {
         (new VerificationController($entityManager))->verifyEmail($_GET);
     });
+
+    $router->map('POST', '/resend-confirmation', function () use ($entityManager) {
+        (new UtilisateurController($entityManager))->resendConfirmationEmail();
+    });
 }
