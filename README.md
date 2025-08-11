@@ -42,7 +42,8 @@
 
 # Recuperer les infos de l'utilisateur
 `GET api/utilisateurs/{id}`
-retour:
+**Response (JSON)** :
+```json
 {
     "id": 25,
     "email": "filskiemde13@gmail.com",
@@ -55,12 +56,15 @@ retour:
     },
     "updatedAt": null
 }
+```
 # Mise à jour 
 `PUT api/utilisateurs/{id}`
-ressources:
+**Body (JSON)** :
+```json
 {
     "name": "kiemde",
     "surname": "lucien",
     "email": "filskiemde13@gmail.com",
     "password": "lucien"
 }
+```
