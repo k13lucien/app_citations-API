@@ -1,9 +1,38 @@
 <?php
 
-use App_citations\Controllers\{CitationController, UtilisateurController, CategorieController, PreferenceController, LikeController, VueController, VerificationController};
-use App_citations\Middlewares\{AuthMiddleware, JwtMiddleware, CitationOwnerMiddleware};
+use App_citations\Controllers\CitationController;
+use App_citations\Controllers\UtilisateurController;
+use App_citations\Controllers\CategorieController;
+use App_citations\Controllers\PreferenceController;
+use App_citations\Controllers\LikeController;
+use App_citations\Controllers\VueController;
+use App_citations\Controllers\VerificationController;
+
+use App_citations\Middlewares\AuthMiddleware;
+use App_citations\Middlewares\JwtMiddleware;
+use App_citations\Middlewares\CitationOwnerMiddleware;
 
 function registerRoutes($router, $entityManager) {
+
+    // Routes utilisateurs
+    $router->map('POST', '/utilisateurs/register', function () use ($entityManager) {
+        (new UtilisateurController($entityManager))->register();
+    });
+    $router->map('POST', '/utilisateurs/login', function () use ($entityManager) {
+        (new UtilisateurController($entityManager))->login();
+    });
+    $router->map('GET', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
+        AuthMiddleware::ensureUser($id);
+        (new UtilisateurController($entityManager))->show($id);
+    });
+    $router->map('PUT', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
+        AuthMiddleware::ensureUser($id);
+        (new UtilisateurController($entityManager))->update($id);
+    });
+    $router->map('DELETE', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
+        AuthMiddleware::ensureUser($id);
+        (new UtilisateurController($entityManager))->delete($id);
+    });
 
     $router->map('POST', '/citations', function () use ($entityManager) {
         JwtMiddleware::handle();
@@ -38,29 +67,6 @@ function registerRoutes($router, $entityManager) {
     $router->map('GET', '/citations/categorie/[i:id]', function ($id) use ($entityManager) {
         JwtMiddleware::handle();
         (new CitationController($entityManager))->getByCategorie($id);
-    });
-
-    $router->map('POST', '/utilisateurs/register', function () use ($entityManager) {
-        (new UtilisateurController($entityManager))->register();
-    });
-
-    $router->map('POST', '/utilisateurs/login', function () use ($entityManager) {
-        (new UtilisateurController($entityManager))->login();
-    });
-
-    $router->map('GET', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
-        AuthMiddleware::ensureUser($id);
-        (new UtilisateurController($entityManager))->show($id);
-    });
-
-    $router->map('PUT', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
-        AuthMiddleware::ensureUser($id);
-        (new UtilisateurController($entityManager))->update($id);
-    });
-
-    $router->map('DELETE', '/utilisateurs/[i:id]', function ($id) use ($entityManager) {
-        AuthMiddleware::ensureUser($id);
-        (new UtilisateurController($entityManager))->delete($id);
     });
 
     $router->map('GET', '/categories', function () use ($entityManager) {
