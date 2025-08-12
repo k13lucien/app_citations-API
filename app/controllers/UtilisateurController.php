@@ -147,4 +147,50 @@ class UtilisateurController
 
         echo json_encode(['message' => 'Utilisateur supprimé avec succès']);
     }
+
+    public function resendConfirmationEmail()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if (empty($data['email'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Email requis.']);
+            return;
+        }
+
+        $email = $data['email'];
+
+        // Vérifier si l'utilisateur existe
+        $utilisateur = $this->em->getRepository(Utilisateur::class)->findOneBy(['email' => $email]);
+
+        if (!$utilisateur) {
+            http_response_code(404);
+            echo json_encode(['error' => "Utilisateur introuvable."]);
+            return;
+        }
+
+        // Vérifier s'il est déjà vérifié
+        if ($utilisateur->isVerified()) {
+            http_response_code(400);
+            echo json_encode(['error' => "Ce compte est déjà confirmé."]);
+            return;
+        }
+
+        // Renvoyer l'email de confirmation
+        $mailService = new Mailer();
+        $token = bin2hex(random_bytes(32));
+
+        $utilisateur->setEmailVerificationToken($token);
+        $this->em->flush();
+
+        $confirmationUrl = "http://localhost:8000/api/verify-email?token=" . urlencode($token);
+
+        $subject = "Confirme ton adresse email";
+        $message = "Clique sur ce lien pour confirmer ton compte : <a href='$confirmationUrl'>$confirmationUrl</a>";
+
+        $mailService->send($email, $subject, $message);
+
+        echo json_encode(['message' => "Email de confirmation renvoyé."]);
+    }
+
 }
